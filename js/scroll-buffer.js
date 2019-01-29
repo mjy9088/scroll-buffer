@@ -33,15 +33,18 @@ window.addEventListener('load', function ()
         var tmp = window.pageYOffset || document.scrollTop,
             idxNow = Math.floor((tmp - (document.clientTop || 0)) / height);
         if (isNaN(idxNow)) idxNow = 0;
-        if (idxTo != idxNow) {
-            idxFrom = idxTo;
-            idxTo = idxNow;
+        if (idxTo != idxNow)
+        {
             duration = 500;
             if (animating)
             {
-                // TODO: 적당히 from 계산
+                idxFrom = idxFrom + interpolator((Date.now() - lastTime) / duration) * (idxTo - idxFrom);
+                lastTime = Date.now();
+                idxTo = idxNow;
                 return;
             }
+            idxFrom = idxTo;
+            idxTo = idxNow;
             interpolator = function (x) { return x * x; }
             lastTime = Date.now();
             window.requestAnimationFrame(draw);
