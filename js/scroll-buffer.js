@@ -7,7 +7,7 @@ window.addEventListener('load', function ()
     var section = document.getElementsByTagName('SECTION')[0];
     section.style.position = 'fixed';
     var height, animating = false, idxFrom = 0, idxTo = 0, lastTime = Date.now(),
-        duration = 1, interpolator = function (x) { return x * x; };
+        duration = 1, interpolator = function (x) { return 0.5 + -0.5 * Math.cos(Math.PI * x); };
     function draw()
     {
         animating = true;
@@ -45,7 +45,7 @@ window.addEventListener('load', function ()
             }
             idxFrom = idxTo;
             idxTo = idxNow;
-            interpolator = function (x) { return x * x; }
+            interpolator = function (x) { return 0.5 + -0.5 * Math.cos(Math.PI * x); }
             lastTime = Date.now();
             window.requestAnimationFrame(draw);
         }
