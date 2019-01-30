@@ -38,7 +38,7 @@ window.addEventListener('load', function ()
             duration = 500;
             if (animating)
             {
-                idxFrom = idxFrom + Math.min(Math.max(interpolator((Date.now() - lastTime) / duration) * (idxTo - idxFrom), 1), 0);
+                idxFrom = idxFrom + Math.min(Math.max(interpolator((Date.now() - lastTime) / duration), 0), 1) * (idxTo - idxFrom);
                 lastTime = Date.now();
                 idxTo = idxNow;
                 return;
