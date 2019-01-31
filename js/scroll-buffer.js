@@ -35,16 +35,15 @@ window.addEventListener('load', function ()
         if (isNaN(idxNow)) idxNow = 0;
         if (idxTo != idxNow)
         {
-            duration = 500;
             if (animating)
             {
                 idxFrom = idxFrom + Math.min(Math.max(interpolator((Date.now() - lastTime) / duration), 0), 1) * (idxTo - idxFrom);
                 lastTime = Date.now();
                 idxTo = idxNow;
+                duration = 500 * Math.sqrt(Math.abs(idxTo - idxFrom));
                 return;
             }
-            idxFrom = idxTo;
-            idxTo = idxNow;
+            duration = 500 * Math.sqrt(Math.abs((idxFrom = idxTo)) - (idxTo = idxNow))));
             interpolator = function (x) { return 0.5 + -0.5 * Math.cos(Math.PI * x); }
             lastTime = Date.now();
             window.requestAnimationFrame(draw);
