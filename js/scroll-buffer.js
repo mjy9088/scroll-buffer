@@ -43,7 +43,7 @@ window.addEventListener('load', function ()
                 duration = 500 * Math.sqrt(Math.abs(idxTo - idxFrom));
                 return;
             }
-            duration = 500 * Math.sqrt(Math.abs((idxFrom = idxTo)) - (idxTo = idxNow))));
+            duration = 500 * Math.sqrt(Math.abs((idxFrom = idxTo) - (idxTo = idxNow)));
             interpolator = function (x) { return 0.5 + -0.5 * Math.cos(Math.PI * x); }
             lastTime = Date.now();
             window.requestAnimationFrame(draw);
