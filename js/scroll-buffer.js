@@ -8,19 +8,28 @@ window.addEventListener('load', function ()
     section.style.position = 'fixed';
     var height, animating = false, idxFrom = 0, idxTo = 0, lastTime = Date.now(),
         duration = 1, interpolator = function (x) { return 0.5 + -0.5 * Math.cos(Math.PI * x); };
+    function scry()
+    {
+        if(!animating)
+        {
+            section.style.marginTop = height * idxTo * -0.8 + (window.pageYOffset || document.scrollTop || 0) * -0.2 + "px";
+        }
+    }
     function draw()
     {
         animating = true;
         var now = Date.now(), deltaTime = now - lastTime;
         if (deltaTime > duration)
         {
-            section.style.marginTop = -height * idxTo + "px";
+            section.style.marginTop = height * idxTo * -0.8 + (window.pageYOffset || document.scrollTop || 0) * -0.2 + "px";
             animating = false;
             lastTime = now;
-            return;
         }
-        section.style.marginTop = (idxFrom + (idxTo - idxFrom) * interpolator(deltaTime / duration)) * -height + "px";
-        window.requestAnimationFrame(draw);
+        else
+        {
+            section.style.marginTop = (idxFrom + (idxTo - idxFrom) * interpolator(deltaTime / duration)) * height * -0.8 + (window.pageYOffset || document.scrollTop || 0) * -0.2 + "px";
+            window.requestAnimationFrame(draw);
+        }
     }
     function updateHeight()
     {
@@ -30,8 +39,8 @@ window.addEventListener('load', function ()
     window.addEventListener('resize', updateHeight);
     window.addEventListener('scroll', function ()
     {
-        var tmp = window.pageYOffset || document.scrollTop,
-            idxNow = Math.floor((tmp - (document.clientTop || 0)) / height);
+        var tmp = window.pageYOffset || document.scrollTop || 0,
+            idxNow = Math.floor((tmp - (document.clientTop || 0)) / height + 0.5);
         if (isNaN(idxNow)) idxNow = 0;
         if (idxTo != idxNow)
         {
@@ -41,13 +50,16 @@ window.addEventListener('load', function ()
                 lastTime = Date.now();
                 idxTo = idxNow;
                 duration = 500 * Math.sqrt(Math.abs(idxTo - idxFrom));
-                return;
             }
-            duration = 500 * Math.sqrt(Math.abs((idxFrom = idxTo) - (idxTo = idxNow)));
-            interpolator = function (x) { return 0.5 + -0.5 * Math.cos(Math.PI * x); }
-            lastTime = Date.now();
-            window.requestAnimationFrame(draw);
+            else
+            {
+                duration = 500 * Math.sqrt(Math.abs((idxFrom = idxTo) - (idxTo = idxNow)));
+                interpolator = function (x) { return 0.5 + -0.5 * Math.cos(Math.PI * x); }
+                lastTime = Date.now();
+                window.requestAnimationFrame(draw);
+            }
         }
+        window.requestAnimationFrame(scry);
     });
     updateHeight();
 });
